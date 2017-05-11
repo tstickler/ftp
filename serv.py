@@ -49,5 +49,21 @@ while True:
             print "get"
         elif action == "PUT":
             print "put"
+
+            # Create a socket
+            welcomeSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            # Bind the socket to port 0
+            welcomeSocket.bind(('', 0))
+
+            # Retreive the ephemeral port number
+            print "I chose ephemeral port: ", welcomeSocket.getsockname()[1]
+
+            new_sock = str(welcomeSocket.getsockname()[1])
+
+            clientSock.sendall(new_sock)
+
+            welcomeSocket.close()
+
         elif action == "LS":
             print "ls"
