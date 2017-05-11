@@ -46,13 +46,34 @@ if reply == "Connection Accepted":
         elif user_in == "GET":
             connSock.send("GET")
         elif user_in == "PUT":
+            # Tell server we want to upload
             connSock.send("PUT")
 
+            # Receive socket to connect to from server
             new_port = int(connSock.recv(1024))
 
+            # Create a socket to transmit on
             eph_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-            eph_sock.connect(serverAddr, new_port)
+            # Connect to the socket
+            eph_sock.connect((serverAddr, new_port))
+
+            # Open the file we are sending
+            f = open("file.txt", "r")
+
+            # Begin reading
+            i = f.read(1024)
+
+            # While there is still stuff in the file, keep sending it
+            while i:
+                eph_sock.send(i)
+                i = f.read(1024)
+
+            # Close the file when we're done
+            f.close()
+
+            # Close the socket
+            eph_sock.close()
 
         elif user_in == "LS":
             connSock.send("LS")

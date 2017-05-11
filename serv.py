@@ -56,13 +56,33 @@ while True:
             # Bind the socket to port 0
             welcomeSocket.bind(('', 0))
 
-            # Retreive the ephemeral port number
-            print "I chose ephemeral port: ", welcomeSocket.getsockname()[1]
-
+            # Grab socket number as string
             new_sock = str(welcomeSocket.getsockname()[1])
 
+            # Tell client to connect on this socket
             clientSock.sendall(new_sock)
 
+            # Listen for client connection
+            welcomeSocket.listen(5)
+
+            # Accept client connection
+            client_socket, addr = welcomeSocket.accept()
+
+            # Open file to write
+            new_file = open("new_file.txt", "w")
+
+            # Begin receiving
+            i = client_socket.recv(1024)
+
+            # Keep receiving until there is nothing left
+            while i:
+                new_file.write(i)
+                i = client_socket.recv(1024)
+
+            # Close the file
+            new_file.close()
+
+            # Close the socket
             welcomeSocket.close()
 
         elif action == "LS":
