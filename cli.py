@@ -48,11 +48,11 @@ if reply == "Connection Accepted":
         elif user_in == "PUT":
             connSock.send("PUT")
 
-            new_sock = int(connSock.recv(1024))
+            new_port = int(connSock.recv(1024))
 
             eph_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-            eph_sock.connect(serverAddr, new_sock)
+            eph_sock.connect(serverAddr, new_port)
 
         elif user_in == "LS":
             connSock.send("LS")
