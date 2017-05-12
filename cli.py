@@ -8,10 +8,10 @@ if len(sys.argv) < 3:
     print "USAGE python " + sys.argv[0] + " <server_machine> <server_port>"
 
 # Server address
-serverAddr = "localhost" # sys.argv[1]
+serverAddr = sys.argv[1]
 
 # Server port
-serverPort = 1234 # int(sys.argv[2])
+serverPort = int(sys.argv[2])
 
 # Create a TCP socket
 connSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

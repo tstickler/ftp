@@ -7,7 +7,7 @@ if len(sys.argv) < 2:
     print "USAGE python " + sys.argv[0] + "<PORT NUMBER>"
 
 # The port on which to listen
-listen_port = 1234 #int(sys.argv[1])
+listen_port = int(sys.argv[1])
 
 # Create a welcome socket.
 welcomeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
