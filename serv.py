@@ -1,7 +1,6 @@
 import socket
 import sys
 import commands
-import os
 
 if len(sys.argv) < 2:
     print "USAGE python " + sys.argv[0] + "<PORT NUMBER>"
@@ -84,8 +83,8 @@ while True:
             welcomeSocket.close()
 
         elif action == "PUT":
-            # Parses user input so we can assign the correct filename
-            path, arg = os.path.split(clientSock.recv(1024))
+            # Gets the filename from the client
+            f_name = clientSock.recv(1024)
 
             # Create a socket
             welcomeSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -106,7 +105,7 @@ while True:
             client_socket, addr = welcomeSocket.accept()
 
             # Open file to write
-            new_file = open(arg, "w")
+            new_file = open(f_name, "w")
 
             # Begin receiving
             i = client_socket.recv(1024)
@@ -124,8 +123,6 @@ while True:
             welcomeSocket.close()
 
         elif action == "LS":
-            print "ls"
-
             # Create a socket
             welcomeSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

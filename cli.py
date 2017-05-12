@@ -46,6 +46,7 @@ if reply == "Connection Accepted":
                 print "USAGE get <filepath>"
                 continue
 
+            # Holds the file path
             arg = tokens[1]
 
             # Tell the server we want to download
@@ -96,7 +97,12 @@ if reply == "Connection Accepted":
             if os.path.isfile(arg):
                 # Tell server we want to upload
                 connSock.send("PUT")
-                connSock.send(arg)
+
+                # Parses user input so we can assign the correct filename
+                path, f_name = os.path.split(arg)
+
+                # Send server a filename
+                connSock.send(f_name)
 
                 # Receive socket to connect to from server
                 new_port = int(connSock.recv(1024))
