@@ -69,10 +69,20 @@ while True:
                 # Begin reading
                 i = f.read(1024)
 
+                file_size = len(i)
+
                 # While there is still stuff in the file, keep sending it
                 while i:
-                    client_socket.send(i)
+                    client_socket.sendall(i)
                     i = f.read(1024)
+                    file_size += len(i)
+
+                # Tell the client how big the file should have been
+                file_size = str(file_size)
+                clientSock.sendall(file_size)
+
+                # Report in server
+                print "To:", addr, "\n", "Sent:", arg, "\n", "Size:", file_size
 
                 # Close the file when we're done
                 f.close()
@@ -111,20 +121,35 @@ while True:
             # Begin receiving
             i = client_socket.recv(1024)
 
+            file_size = len(i)
+
             # Keep receiving until there is nothing left
             while i:
                 new_file.write(i)
                 i = client_socket.recv(1024)
+                file_size += len(i)
 
             # Close the file
             new_file.close()
+
+            client_reported_file_size = clientSock.recv(1024)
+            if client_reported_file_size == str(file_size):
+                # Report in server
+                print "From:", addr, "\n", "Received:", f_name, "\n", \
+                    "Size:", file_size
+                clientSock.sendall("SUCCESS")
+            else:
+                print "Failure receiving file"
+                clientSock.sendall("FAIL")
+                os.remove(arg)
 
             # Close the socket
             client_socket.close()
             welcomeSocket.close()
 
         elif action == "LS":
-            print "ls"
+            # Report command
+            print "From:", addr, "\n", "ls command"
 
             # Create a socket
             welcomeSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
